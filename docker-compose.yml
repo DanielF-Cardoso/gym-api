@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  api-gymapp:
+    image: bitnami/postgresql
+    environment:
+      - POSTGRESQL_USERNAME=docker
+      - POSTGRESQL_PASSWORD=docker
+      - POSTGRESQL_DATABASE=gymapp
+    ports:
+      - "5432:5432"
