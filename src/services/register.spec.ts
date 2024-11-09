@@ -17,7 +17,7 @@ describe('Register Services', () => {
 
         expect(user.id).toEqual(expect.any(String))
     }),
-    it('should hash user password upon registrarion', async () => {
+        it('should hash user password upon registrarion', async () => {
             const usersRepository = new InMemoryUsersRepository()
             const registerServices = new RegisterServices(usersRepository)
 
@@ -30,8 +30,8 @@ describe('Register Services', () => {
             const isPasswordHashed = await compare('123456', user.password_hash)
 
             expect(isPasswordHashed).toBe(true)
-    }),
-    it('should not be able to register with same email twice', async () => {
+        }),
+        it('should not be able to register with same email twice', async () => {
             const usersRepository = new InMemoryUsersRepository()
             const registerServices = new RegisterServices(usersRepository)
 
@@ -51,5 +51,5 @@ describe('Register Services', () => {
                 })
             ).rejects.toBeInstanceOf(UserAlreadyExists)
 
-    })
+        })
 })
