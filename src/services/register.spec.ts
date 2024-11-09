@@ -8,49 +8,45 @@ let usersRepository: InMemoryUsersRepository
 let sut: RegisterServices
 
 describe('Register Services', () => {
-    beforeEach(() => {
-       usersRepository = new InMemoryUsersRepository()
-       sut = new RegisterServices(usersRepository)
+  beforeEach(() => {
+    usersRepository = new InMemoryUsersRepository()
+    sut = new RegisterServices(usersRepository)
+  })
+  it('should be able to register', async () => {
+    const { user } = await sut.execute({
+      name: 'John Doe',
+      email: 'johndoe@gmail.com',
+      password: '123456',
     })
-    it('should be able to register', async () => {
 
-        const { user } = await sut.execute({
-            name: 'John Doe',
-            email: 'johndoe@gmail.com',
-            password: '123456'
-        })
+    expect(user.id).toEqual(expect.any(String))
+  }),
+    it('should hash user password upon registrarion', async () => {
+      const { user } = await sut.execute({
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        password: '123456',
+      })
 
-        expect(user.id).toEqual(expect.any(String))
+      const isPasswordHashed = await compare('123456', user.password_hash)
+
+      expect(isPasswordHashed).toBe(true)
     }),
-        it('should hash user password upon registrarion', async () => {
+    it('should not be able to register with same email twice', async () => {
+      const email = 'johndoe@gmail.com'
 
-            const { user } = await sut.execute({
-                name: 'John Doe',
-                email: 'johndoe@gmail.com',
-                password: '123456'
-            })
+      await sut.execute({
+        name: 'John Doe',
+        email,
+        password: '123456',
+      })
 
-            const isPasswordHashed = await compare('123456', user.password_hash)
-
-            expect(isPasswordHashed).toBe(true)
+      await expect(() =>
+        sut.execute({
+          name: 'John Doe',
+          email,
+          password: '123456',
         }),
-        it('should not be able to register with same email twice', async () => {
-
-            const email = 'johndoe@gmail.com'
-
-            await sut.execute({
-                name: 'John Doe',
-                email,
-                password: '123456'
-            })
-
-            await expect(() =>
-                sut.execute({
-                    name: 'John Doe',
-                    email,
-                    password: '123456'
-                })
-            ).rejects.toBeInstanceOf(UserAlreadyExists)
-
-        })
+      ).rejects.toBeInstanceOf(UserAlreadyExists)
+    })
 })

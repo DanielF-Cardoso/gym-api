@@ -5,7 +5,6 @@
     "rules": {
         "camelcase": "off",
         "no-useless-constructor": "off",
-        "prettier/prettier": 0,
-        "no-useless-call": "off",
+        "no-useless-call": "off"
     }
 }
