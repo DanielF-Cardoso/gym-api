@@ -21,7 +21,7 @@ describe('Register Services', () => {
 
     expect(user.id).toEqual(expect.any(String))
   }),
-    it('should hash user password upon registrarion', async () => {
+  it('should hash user password upon registrarion', async () => {
       const { user } = await sut.execute({
         name: 'John Doe',
         email: 'johndoe@gmail.com',
@@ -31,8 +31,8 @@ describe('Register Services', () => {
       const isPasswordHashed = await compare('123456', user.password_hash)
 
       expect(isPasswordHashed).toBe(true)
-    }),
-    it('should not be able to register with same email twice', async () => {
+  }),
+  it('should not be able to register with same email twice', async () => {
       const email = 'johndoe@gmail.com'
 
       await sut.execute({
@@ -48,5 +48,5 @@ describe('Register Services', () => {
           password: '123456',
         }),
       ).rejects.toBeInstanceOf(UserAlreadyExists)
-    })
+  })
 })
