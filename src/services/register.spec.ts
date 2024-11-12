@@ -20,33 +20,35 @@ describe('Register Services', () => {
     })
 
     expect(user.id).toEqual(expect.any(String))
-  }),
-  it('should hash user password upon registrarion', async () => {
-      const { user } = await sut.execute({
-        name: 'John Doe',
-        email: 'johndoe@gmail.com',
-        password: '123456',
-      })
+  })
 
-      const isPasswordHashed = await compare('123456', user.password_hash)
+  it('should hash user password upon registration', async () => {
+    const { user } = await sut.execute({
+      name: 'John Doe',
+      email: 'johndoe@gmail.com',
+      password: '123456',
+    })
 
-      expect(isPasswordHashed).toBe(true)
-  }),
+    const isPasswordHashed = await compare('123456', user.password_hash)
+
+    expect(isPasswordHashed).toBe(true)
+  })
+
   it('should not be able to register with same email twice', async () => {
-      const email = 'johndoe@gmail.com'
+    const email = 'johndoe@gmail.com'
 
-      await sut.execute({
+    await sut.execute({
+      name: 'John Doe',
+      email,
+      password: '123456',
+    })
+
+    await expect(() =>
+      sut.execute({
         name: 'John Doe',
         email,
         password: '123456',
-      })
-
-      await expect(() =>
-        sut.execute({
-          name: 'John Doe',
-          email,
-          password: '123456',
-        }),
-      ).rejects.toBeInstanceOf(UserAlreadyExists)
+      }),
+    ).rejects.toBeInstanceOf(UserAlreadyExists)
   })
 })
