@@ -1,1 +1,1 @@
-# gym-api - node
+# gym-api - node api
