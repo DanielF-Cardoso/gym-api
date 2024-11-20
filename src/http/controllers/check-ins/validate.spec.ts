@@ -14,7 +14,7 @@ describe('Validate Gym (e2e)', () => {
   })
 
   it('should be able to validate a check-in', async () => {
-    const { token } = await createAndAuthenticateUser(app)
+    const { token } = await createAndAuthenticateUser(app, true)
 
     const user = await prisma.user.findFirstOrThrow()
 
@@ -37,8 +37,6 @@ describe('Validate Gym (e2e)', () => {
       .patch(`/check-ins/${checkIn.id}/validate`)
       .set('Authorization', `Bearer ${token}`)
       .send()
-
-    console.log(response.body)
 
     expect(response.status).toBe(204)
 
